@@ -1,0 +1,113 @@
+#!/usr/bin/env node
+
+/**
+ * Module dependencies.
+ */
+
+var app = require('../app');
+var debug = require('debug')('backend:server');
+var http = require('http');
+const cam = require('../Components/CmdArgMan');
+const ioman = require('../Components/SocketIOManager');
+const sm = require('../Components/ServerManager');
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || cam.PORT || '3000');
+app.set('port', port);
+
+console.log(`Current Port : ${port}`);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+// socket io 연결 처리가 필요하면 활성화 한다
+//ioman.init(server, app.session)
+//sm.init(ioman.io)
+const db = require('../Lib/MYSQL');
+const Logger = require('../Components/Logger');
+
+(async () => {
+  try {
+    Logger.info('서버를 초기화 중입니다');
+
+    await db.init();
+    Logger.info('DB 초기화 완료');
+
+    server.listen(port);
+    server.on('error', onError);
+    server.on('listening', onListening);
+  } catch (e) {
+    Logger.error(`서버 초기화에 실패했습니다. - ${e}`);
+    process.exit(0);
+  }
+})()
+
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  var port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // named pipe
+    return val;
+  }
+
+  if (port >= 0) {
+    // port number
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ */
+
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  var bind = typeof port === 'string'
+    ? 'Pipe ' + port
+    : 'Port ' + port;
+
+  // handle specific listen errors with friendly messages
+  switch (error.code) {
+    case 'EACCES':
+      console.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      console.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ */
+
+function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string'
+    ? 'pipe ' + addr
+    : 'port ' + addr.port;
+  Logger.info(`서버 Listening - ${port}`);
+}

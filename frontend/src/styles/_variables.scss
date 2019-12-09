@@ -1,0 +1,32 @@
+// 컬러
+$color-primary: #78909C;
+
+$cr-primary-1: #78909C;
+$cr-primary-2: #455A64;
+$cr-primary-3: #283593;
+$cr-font-1: white;
+$cr-confirm : #4CAF50;
+$cr-cancel : #F44336;
+$cr-alert: $cr-cancel;
+
+$cr-level-1: #4CAF50;
+$cr-level-2: #CDDC39;
+$cr-level-3: #FFC107;
+$cr-level-4: #FF9800;
+$cr-level-5: #F44336;
+
+@mixin border-radius($radius) {    
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+}
+
+
+// 사이즈 관련
+
+// 공통
+$common-pd-1: 8px;
+
+// Top Menu 
+$layout-top-menu-height: 80px;
