@@ -17,7 +17,7 @@
     "express-socket.io-session": "^1.3.5",
     "generate-password": "^1.4.2",
     "http-errors": "~1.6.3",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "morgan": "~1.9.1",
     "mssql": "^5.1.0",
     "mysql": "^2.17.1",
